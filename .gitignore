@@ -4,3 +4,4 @@ LINQPadBlog/bin/
 LINQPadBlog/obj/
 packages/
 LINQPadBlog.Tests/obj/
+*.nupkg
