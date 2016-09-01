@@ -1,0 +1,6 @@
+.vs/
+LINQPadBlog.Tests/bin/
+LINQPadBlog/bin/
+LINQPadBlog/obj/
+packages/
+LINQPadBlog.Tests/obj/
