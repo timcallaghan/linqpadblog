@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LINQPadBlog")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Generates a blog post from any valid LINQPad file (*.linq)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Scombroid Pty Ltd")]
 [assembly: AssemblyProduct("LINQPadBlog")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
