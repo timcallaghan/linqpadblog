@@ -11,7 +11,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         {
             var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, "TestType1" });
 
-            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs);
+            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
 
             Assert.IsNotNull(scriptInfo);
             Assert.AreEqual(Globals.LINQPad.QueryKind.CSharpExpression, scriptInfo.QueryKind);
@@ -23,7 +23,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         {
             var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpStatements, "TestType1" });
 
-            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs);
+            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
 
             Assert.IsNotNull(scriptInfo);
             Assert.AreEqual(Globals.LINQPad.QueryKind.CSharpStatements, scriptInfo.QueryKind);
@@ -35,7 +35,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         {
             var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpProgram, "TestType1" });
 
-            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs);
+            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
 
             Assert.IsNotNull(scriptInfo);
             Assert.AreEqual(Globals.LINQPad.QueryKind.CSharpProgram, scriptInfo.QueryKind);
