@@ -16,43 +16,38 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ThrowsArgumentExceptionWhenInputOnlyHasOneElement()
+        public void ThrowsArgumentExceptionWhenInputIsEmpty()
         {
-            ProcessedArgs.ProcessScriptArgs(new string[] { "arg1" });
+            ProcessedArgs.ProcessScriptArgs(new string[] { });
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ThrowsArgumentExceptionWhenFirstInputIsNotAFilePath()
         {
-            ProcessedArgs.ProcessScriptArgs(new string[] { "arg1", "arg2" });
+            ProcessedArgs.ProcessScriptArgs(new string[] { "arg1" });
         }
 
         [TestMethod]
         public void SuccessfullyProcessesTwoArgs()
         {
-            var generatorType = "Type1";
-
-            var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, generatorType });
+            var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression });
 
             Assert.IsNotNull(pa.FilePath);
             Assert.IsTrue(pa.FilePath.FullName.EndsWith(TestData.CSharpExpression));
-            Assert.AreEqual(generatorType, pa.GeneratorType);
             Assert.IsNull(pa.AdditionalArgs);
         }
 
         [TestMethod]
         public void SuccessfullyProcessesMoreThanTwoArgs()
         {
-            var generatorType = "Type1";
             var arg3 = "arg3";
             var arg4 = "arg4";
 
-            var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, generatorType, arg3, arg4 });
+            var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, arg3, arg4 });
 
             Assert.IsNotNull(pa.FilePath);
             Assert.IsTrue(pa.FilePath.FullName.EndsWith(TestData.CSharpExpression));
-            Assert.AreEqual(generatorType, pa.GeneratorType);
             Assert.IsNotNull(pa.AdditionalArgs);
             Assert.AreEqual(2, pa.AdditionalArgs.Length);
             Assert.AreEqual(arg3, pa.AdditionalArgs[0]);

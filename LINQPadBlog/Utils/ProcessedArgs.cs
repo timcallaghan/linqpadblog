@@ -7,16 +7,15 @@ namespace Scombroid.LINQPadBlog.Utils
     public class ProcessedArgs
     {
         public FileInfo FilePath { get; set; }
-        public string GeneratorType { get; set; }
         public object[] AdditionalArgs { get; set; }
 
         public static ProcessedArgs ProcessScriptArgs(string[] args)
         {
             // First arg is the linq file path, all remaining args are passed on
             // as parameters to the linq file.
-            if (args == null || args.Length < 2)
+            if (args == null || args.Length < 1)
             {
-                throw new ArgumentException($"{Globals.AppName} requires at least two arguments");
+                throw new ArgumentException($"{Globals.AppName} requires at least one argument");
             }
 
             var filePath = new FileInfo(args[0]);
@@ -26,12 +25,12 @@ namespace Scombroid.LINQPadBlog.Utils
             }
 
             string[] scriptArgs = null;
-            if (args.Length > 2)
+            if (args.Length > 1)
             {
-                scriptArgs = args.Skip(2).ToArray();
+                scriptArgs = args.Skip(1).ToArray();
             }
 
-            return new ProcessedArgs() { FilePath = filePath, GeneratorType = args[1], AdditionalArgs = scriptArgs };
+            return new ProcessedArgs() { FilePath = filePath, AdditionalArgs = scriptArgs };
         }
     }
 }
