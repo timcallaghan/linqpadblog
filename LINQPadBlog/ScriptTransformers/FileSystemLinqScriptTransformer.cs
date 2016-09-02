@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Scombroid.LINQPadBlog.Utils;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Scombroid.LINQPadBlog.ScriptTransformers
 {
@@ -73,8 +72,13 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
         private HtmlDocument BuildHtmlContents(LinqPadScriptInfo scriptInfo, string scriptHtml, bool replaceResources)
         {
             var htmlDoc = scriptInfo.LinqPadWebResources.LinqPadHtmlDoc;
+            htmlDoc.OptionWriteEmptyNodes = true;
 
             HtmlNode head = htmlDoc.DocumentNode.SelectSingleNode(Globals.DOM.HeadNodePath);
+
+            var titleNode = htmlDoc.CreateElement("title");
+            titleNode.InnerHtml = Path.GetFileNameWithoutExtension(scriptInfo.ProcessedArgs.FilePath.Name);
+            head.ChildNodes.Add(titleNode);
 
             if (replaceResources)
             {
@@ -111,6 +115,10 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             if (scriptHtml.EndsWith(Globals.FileSystem.CodeSectionStart))
             {
                 scriptHtml = scriptHtml.Substring(0, scriptHtml.Length - Globals.FileSystem.CodeSectionStart.Length);
+            }
+            else if (scriptHtml.EndsWith(Globals.FileSystem.CodeSectionStart + Environment.NewLine))
+            {
+                scriptHtml = scriptHtml.Substring(0, scriptHtml.Length - Globals.FileSystem.CodeSectionStart.Length - Environment.NewLine.Length);
             }
             else
             {

@@ -1,6 +1,5 @@
 ﻿using Scombroid.LINQPadBlog.ScriptTransformers;
 using Scombroid.LINQPadBlog.Utils;
-using System.Threading.Tasks;
 
 namespace Scombroid.LINQPadBlog
 {

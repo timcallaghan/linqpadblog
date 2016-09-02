@@ -41,8 +41,6 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
         private HtmlDocument BuildHtmlContents(LinqPadScriptInfo scriptInfo, string scriptHtml, string codeSectionStart)
         {
             var htmlDoc = scriptInfo.LinqPadWebResources.LinqPadHtmlDoc;
-
-            HtmlNode head = htmlDoc.DocumentNode.SelectSingleNode(Globals.DOM.HeadNodePath);
             var body = htmlDoc.DocumentNode.SelectSingleNode(Globals.DOM.BodyNodePath);
 
             if (scriptHtml.StartsWith(Globals.WordPressCom.CodeSectionEnd))
@@ -53,6 +51,10 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             if (scriptHtml.EndsWith(codeSectionStart))
             {
                 scriptHtml = scriptHtml.Substring(0, scriptHtml.Length - codeSectionStart.Length);
+            }
+            else if (scriptHtml.EndsWith(codeSectionStart + Environment.NewLine))
+            {
+                scriptHtml = scriptHtml.Substring(0, scriptHtml.Length - codeSectionStart.Length - Environment.NewLine.Length);
             }
             else
             {
