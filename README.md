@@ -9,10 +9,10 @@ LINQPadBlog generates a blog post from valid LINQPad files (*.linq). It transfor
 
 ### Limitations ###
 
-* Currently only supports one-time upload to wordpress.com (if you need edit an uploaded post you'll first need to delete the original to avoid duplicates)
+* Currently only supports one-time upload to wordpress.com (if you need to edit an uploaded post you'll first need to delete the original to avoid duplicates)
 * Currently only supports C# comments
-* Doesn't work with LINQPad's Dump() of images
-* Doesn't have exception handling
+* Doesn't work with LINQPad's Dump() for images
+* Doesn't have robust exception handling
 
 The plan is to fix all of these issues over time.
 
