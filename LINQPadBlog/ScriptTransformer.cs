@@ -1,11 +1,12 @@
 ﻿using Scombroid.LINQPadBlog.ScriptTransformers;
 using Scombroid.LINQPadBlog.Utils;
+using System.Threading.Tasks;
 
 namespace Scombroid.LINQPadBlog
 {
     public static class ScriptTransformer
     {
-        public static void Transform
+        public static IScriptTransformResult Transform
         (
             ILinqScriptTransformer transformer, 
             ProcessedArgs processedArgs, 
@@ -14,7 +15,7 @@ namespace Scombroid.LINQPadBlog
         )
         {
             var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, stripMeFromFile);
-            transformer.Transform(scriptInfo, scriptParams);
+            return transformer.Transform(scriptInfo, scriptParams);
         }
     }
 }

@@ -63,6 +63,7 @@
             public const string LATEXMarker = "$";
             public const string CodeSectionStart = @"[code language=""{0}""]";
             public const string CodeSectionEnd = @"[/code]";
+            public const string BaseAPIUri = @"https://public-api.wordpress.com/rest/v1.1/sites/";
 
             public class Syntax
             {

@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Scombroid.LINQPadBlog.Utils;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Scombroid.LINQPadBlog.ScriptTransformers
 {
@@ -23,8 +24,10 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             _blogDir = blogDir;
         }
 
-        public void Transform(LinqPadScriptInfo scriptInfo, IScriptTransformParams scriptParams)
+        public IScriptTransformResult Transform(LinqPadScriptInfo scriptInfo, IScriptTransformParams scriptParams)
         {
+            var result = new ScriptTransformResult();
+
             // Create the Posts directory if it doesn't exist
             if (!_blogDir.Exists)
             {
@@ -48,6 +51,10 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             var output = BuildHtmlContents(scriptInfo, newRoot.ToFullString(), true);
 
             File.WriteAllText(outfile.FullName, output.DocumentNode.OuterHtml);
+
+            result.Location = outfile.FullName;
+
+            return result;
         }
 
         private void CreateWebPageResourceFiles(LinqPadScriptInfo scriptInfo, DirectoryInfo blogDir)

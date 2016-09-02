@@ -4,6 +4,6 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 {
     public interface ILinqScriptTransformer
     {
-        void Transform(LinqPadScriptInfo scriptInfo, IScriptTransformParams scriptParams);
+        IScriptTransformResult Transform(LinqPadScriptInfo scriptInfo, IScriptTransformParams scriptParams);
     }
 }

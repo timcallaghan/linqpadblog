@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Scombroid.LINQPadBlog.Utils;
 using System;
+using System.Net;
 using WordPressSharp;
 using WordPressSharp.Models;
 
@@ -16,8 +17,10 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
         }
 
-        public void Transform(LinqPadScriptInfo scriptInfo, IScriptTransformParams scriptParams)
+        public IScriptTransformResult Transform(LinqPadScriptInfo scriptInfo, IScriptTransformParams scriptParams)
         {
+            var result = new ScriptTransformResult();
+
             var postParams = scriptParams as WordPressDotComParams;
             if (postParams == null)
                 throw new ArgumentException($"{nameof(scriptParams)} must be an instance of {nameof(WordPressDotComParams)}");
@@ -30,7 +33,9 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
             var output = BuildHtmlContents(scriptInfo, newRoot.ToFullString(), rewriter.CodeSectionStart);
 
-            UploadBlogPostToWordPress(output, postParams);
+            result.Location = UploadBlogPostToWordPress(output, postParams);
+
+            return result;
         }
 
         private HtmlDocument BuildHtmlContents(LinqPadScriptInfo scriptInfo, string scriptHtml, string codeSectionStart)
@@ -63,8 +68,9 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             return htmlDoc;
         }
 
-        void UploadBlogPostToWordPress(HtmlDocument htmlDoc, WordPressDotComParams postParams)
+        string UploadBlogPostToWordPress(HtmlDocument htmlDoc, WordPressDotComParams postParams)
         {
+            // TODO: Remove dependency on WordPressClient and use Wordpress.com API instead
             var wpsc = new WordPressSiteConfig()
             {
                BaseUrl = postParams.BaseUrl,
@@ -91,9 +97,21 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             using (var wpc = new WordPressClient(wpsc))
             {
                 var id = Convert.ToInt32(wpc.NewPost(post));
-
                 // TODO: Write the id to a postinfo.xml file so that
                 // we can update the post by id in future
+
+                // NOTE: WordPressClient.GetPost(id) fails due to outdated libs
+                // Better to use Wordpress.com API (rather than XmlRPC) anyway
+                // NOTE: Unfortunately, this all needs to be synchronous for now due to possible LINQPad limitations 
+                // TODO: Try and make it async...
+
+                using (var webClient = new WebClient())
+                {
+                    var blogSite = new Uri(postParams.BaseUrl);
+                    var postJson = webClient.DownloadString($"{Globals.WordPressCom.BaseAPIUri}{blogSite.Host}/posts/{id}");
+                    dynamic uploadedPost = Newtonsoft.Json.JsonConvert.DeserializeObject(postJson);
+                    return uploadedPost.URL;
+                }
             }
         }
 

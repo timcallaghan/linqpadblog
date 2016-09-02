@@ -9,7 +9,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         [TestMethod]
         public void SuccessfullyLoadsCSharpExpressionScript()
         {
-            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, "TestType1" });
+            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression });
 
             var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
 
@@ -21,7 +21,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         [TestMethod]
         public void SuccessfullyLoadsCSharpStatementsScript()
         {
-            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpStatements, "TestType1" });
+            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpStatements });
 
             var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
 
@@ -33,7 +33,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         [TestMethod]
         public void SuccessfullyLoadsCSharpProgramScript()
         {
-            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpProgram, "TestType1" });
+            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpProgram });
 
             var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
 
