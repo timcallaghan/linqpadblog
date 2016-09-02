@@ -67,7 +67,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="TestData\CSharpExpression.linq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
