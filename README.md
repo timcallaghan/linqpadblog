@@ -77,7 +77,7 @@ Here's an example
 /*
 You place you text between multi-line comment markers.  
 Standard Markdown is supported (via MarkdownSharp) so things like *italicized* and **bold** work as expected.  
-You can also inlcude mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
+You can also include mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 */
 void Main()
