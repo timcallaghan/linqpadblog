@@ -107,7 +107,7 @@ The process is:
 * Text can include Markdown and LATEX
 * At the end of the executable code section, place a call to a static helper method to perform the transform
 * The static helper method feeds the current *.linq file into the transformation engine
-* The transformation engine parses the file and transforms and Markdown into html, as well as encoding LATEX for the output target
+* The transformation engine parses the file and transforms any Markdown into html, as well as encoding LATEX for the output target
 * The *.linq file is run (via LINQPad's Util.Run method) and all output is captured
 * An html document is generated with the transformed text contents, code sections, and any output
 * Depending on the output target, the html document is either written to the local file system or uploaded to wordpress.com
