@@ -64,15 +64,39 @@ The setup process is slightly convoluted so suggestions to improve this process 
 	}
 ~~~~
 
+* Open the `Query Properties` dialog (F4) and add a reference to the LINQPadBlog nuget package
+* In the `Query Properties` dialog, also add a reference to `System.Windows.Forms.dll`
+* Click `OK`
 
+You should now have LINQPadBlog accessible by all scripts that you write.
 
+### How do I use it? ###
 
-* Add the LINQPadBlog nuget package
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Here's an example
+~~~~
+/*
+You place you text between multi-line comment markers.  
+Standard Markdown is supported (via MarkdownSharp) so things like *italicized* and **bold** work as expected.  
+You can also inlcude mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+*/
+void Main()
+{
+	// Single line comments will not be transformed
+	var a = 40;
+	var b = 2;
+	var c = a + b;
+
+	c.Dump("Meaning of life");
+	// At the end of your executable code, call one of the static helper methods to perform the transformation and then hit F5 to see the results.
+	// Note that this call will be stripped from the file (to prevent an infinite call cycle!)
+	MyExtensions.CreateFileSystemBlogPost(new DirectoryInfo(@"D:\Temp\BlogOutput"));
+}
+/*
+It's also ok to add comments after the code.  
+Any output from calls to .Dump() will be placed at the end of the file.
+*/
+~~~~
 
 ### How does it work? ###
 
