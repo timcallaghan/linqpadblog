@@ -13,6 +13,7 @@ LINQPadBlog generates a blog post from valid LINQPad files (*.linq). It transfor
 * Currently only supports C# comments
 * Doesn't work with LINQPad's Dump() for images
 * Doesn't have robust exception handling
+* File system transformation still resolves external scripts and styles from CDN references (so it won't work offline)
 
 The plan is to fix all of these issues over time.
 
@@ -76,8 +77,8 @@ Here's an example
 ~~~~
 /*
 Place text between multi-line comment markers.  
-Standard Markdown is supported (via MarkdownSharp) so things like *italicized* and **bold** work as expected.  
-You can also inlcude mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
+Standard Markdown is supported so things like *italicized* and **bold** work as expected.  
+You can also include mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 */
 void Main()
