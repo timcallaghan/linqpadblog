@@ -75,9 +75,9 @@ You should now have LINQPadBlog accessible by all scripts that you write.
 Here's an example
 ~~~~
 /*
-You place you text between multi-line comment markers.  
+Place text between multi-line comment markers.  
 Standard Markdown is supported (via MarkdownSharp) so things like *italicized* and **bold** work as expected.  
-You can also include mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
+You can also inlcude mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 */
 void Main()
@@ -89,12 +89,13 @@ void Main()
 
 	c.Dump("Meaning of life");
 	// At the end of your executable code, call one of the static helper methods to perform the transformation and then hit F5 to see the results.
-	// Note that this call will be stripped from the file (to prevent an infinite call cycle!)
+	// Note that the call to CreateFileSystemBlogPost will be stripped from the file (to prevent an infinite call cycle!)
 	MyExtensions.CreateFileSystemBlogPost(new DirectoryInfo(@"D:\Temp\BlogOutput"));
 }
 /*
 It's also ok to add comments after the code.  
-Any output from calls to .Dump() will be placed at the end of the file.
+Any output from calls to .Dump() will be placed at the end of the file.  
+It's a good idea to name your .Dump() calls so that LINQPad generates a nice heading to correlate with the code output.
 */
 ~~~~
 
