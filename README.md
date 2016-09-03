@@ -113,6 +113,7 @@ The process is:
 * The *.linq file is run (via LINQPad's Util.Run method) and all output is captured
 * An html document is generated with the transformed text contents, code sections, and any output
 * Depending on the output target, the html document is either written to the local file system or uploaded to wordpress.com
+* The result of the transformation is loaded into a win forms WebBrowser control and added as a separate tab in LINQPad's output area
 
 ### Contribution guidelines ###
 
