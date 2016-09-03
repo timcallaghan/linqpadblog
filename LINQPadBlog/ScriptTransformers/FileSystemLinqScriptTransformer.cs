@@ -27,7 +27,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
         {
             var result = new ScriptTransformResult();
 
-            // Create the Posts directory if it doesn't exist
+            // Create blog directory if it doesn't exist
             if (!_blogDir.Exists)
             {
                 _blogDir.Create();
@@ -35,10 +35,8 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
             CreateWebPageResourceFiles(scriptInfo, _blogDir);
 
-            // TODO: We need to generate different markup depending on the QueryKind
-            // i.e. C#, VB, F# (each will need a different prettyprint lang- setting)
-
             // Convert markdown to html
+            // TODO: Handle more queryKind types (i.e. F#, VB)
             var tree = CSharpSyntaxTree.ParseText(scriptInfo.ScriptContents);
             SyntaxNode root = tree.GetRoot();
             var rewriter = new CommentRewriter();
@@ -48,9 +46,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             var outfile = new FileInfo(Path.Combine(_blogDir.FullName, Path.ChangeExtension(scriptInfo.ProcessedArgs.FilePath.Name, "html")));
 
             var output = BuildHtmlContents(scriptInfo, newRoot.ToFullString(), true);
-
             File.WriteAllText(outfile.FullName, output.DocumentNode.OuterHtml);
-
             result.Location = outfile.FullName;
 
             return result;
@@ -146,22 +142,22 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
         private class CommentRewriter : CSharpSyntaxRewriter
         {
-            Markdown mark = new Markdown();
+            Markdown _mark = new Markdown();
 
             public override SyntaxTrivia VisitTrivia(SyntaxTrivia trivia)
             {
                 // By convention, LINQPadBlog only looks for markdown in multi-line trivia
                 if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
                 {
-                    // Remove the leading "/*" from the comment
-                    var multilineComment = trivia.ToString().Substring(2);
-                    // Remove the trailing "*//r/n" from the comment
-                    multilineComment = multilineComment.Substring(0, multilineComment.Length - 3);
+                    // Remove the leading multi-line comment start tag
+                    var multilineComment = trivia.ToString().Substring(Globals.Comments.CSharpStart.Length);
+                    // Remove the trailing multi-line comment end tag
+                    multilineComment = multilineComment.Substring(0, multilineComment.Length - Globals.Comments.CSharpEnd.Length);                  
 
                     // Assumes that all multi-line comments are embedded between a block of code 
                     // (should be true in general except at the start or end of the file, which is handled elsewhere)
                     // Use Markdown to transform any embedded markdown in the comments to html
-                    return SyntaxFactory.Comment(Globals.FileSystem.CodeSectionEnd + mark.Transform(multilineComment) + Globals.FileSystem.CodeSectionStart);
+                    return SyntaxFactory.Comment(Globals.FileSystem.CodeSectionEnd + _mark.Transform(multilineComment) + Globals.FileSystem.CodeSectionStart);
                 }
                 else
                 {

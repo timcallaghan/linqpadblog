@@ -1,4 +1,5 @@
 ﻿using LINQPad;
+using System;
 using System.IO;
 using System.Text;
 using System.Xml.Linq;
@@ -82,6 +83,9 @@ namespace Scombroid.LINQPadBlog.Utils
             XDocument doc = XDocument.Parse(linqPadScriptInfo.Header);
             linqPadScriptInfo.QueryKind = doc.Root.Attribute(Globals.LINQPad.QueryKindAttributeName).Value;
 
+            if (!IsQuerySupported(linqPadScriptInfo.QueryKind))
+                throw new NotSupportedException($"{Globals.AppName} does not support query kind of {linqPadScriptInfo.QueryKind}");
+
             // Run the *.linq file and capture the html output fragments from calls to .Dump() within the file
             linqPadScriptInfo.ScriptOutput = Util.Run(
                 tempFile.FullName,
@@ -95,6 +99,13 @@ namespace Scombroid.LINQPadBlog.Utils
             tempFile.Delete();
 
             return linqPadScriptInfo;
+        }
+
+        private static bool IsQuerySupported(string queryKind)
+        {
+            return queryKind == Globals.LINQPad.QueryKind.CSharpExpression
+                || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
+                || queryKind == Globals.LINQPad.QueryKind.CSharpProgram;
         }
     }
 }

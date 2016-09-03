@@ -35,6 +35,14 @@
             }
         }
 
+        public class Comments
+        {
+            public const string CSharpStart = "/*";
+            public const string CSharpEnd = "*/";
+            public const string FSharpStart = "(*";
+            public const string FSharpEnd = "*)";
+        }
+
         // LATEX/MathJax
         public class LATEX
         {
