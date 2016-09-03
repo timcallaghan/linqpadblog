@@ -50,9 +50,11 @@
             public const string LINQPadCssFileName = "linqpad.css";
             public const string LINQPadJsFileName = "linqpad.js";
             public const string ResourcesFolderName = "resources";
-            public const string CodeSectionStart = @"<pre class=""prettyprint lang-cs"">";
-            public const string CodeSectionEnd = @"</pre>";
-            public const string PrettifyCdnUri = @"https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js";
+            public const string CodeSectionStart = @"<pre><code>";
+            public const string CodeSectionEnd = @"</code></pre>";
+            public const string HighlightJsCssCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css";
+            public const string HighlightJsCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js";
+            public const string HighlightJsLoadStatement = @"hljs.initHighlightingOnLoad();";
             public const string MathJaxCdnUri = @"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML";
         }
 

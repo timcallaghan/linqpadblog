@@ -97,9 +97,19 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
                 head.ReplaceChild(replacementScriptNode, scriptNode);
             }
 
-            var scriptPrettify = htmlDoc.CreateElement("script");
-            scriptPrettify.SetAttributeValue("src", Globals.FileSystem.PrettifyCdnUri);
-            head.AppendChild(scriptPrettify);
+            var linkHighlightJsCss = htmlDoc.CreateElement("link");
+            linkHighlightJsCss.SetAttributeValue("rel", "stylesheet");
+            linkHighlightJsCss.SetAttributeValue("type", "text/css");
+            linkHighlightJsCss.SetAttributeValue("href", Globals.FileSystem.HighlightJsCssCdnUri);
+            head.AppendChild(linkHighlightJsCss);
+
+            var scriptHighlightJs = htmlDoc.CreateElement("script");
+            scriptHighlightJs.SetAttributeValue("src", Globals.FileSystem.HighlightJsCdnUri);
+            head.AppendChild(scriptHighlightJs);
+
+            var scriptHighlightJsLoad = htmlDoc.CreateElement("script");
+            scriptHighlightJsLoad.InnerHtml = Globals.FileSystem.HighlightJsLoadStatement;
+            head.AppendChild(scriptHighlightJsLoad);
 
             var scriptMathJax = htmlDoc.CreateElement("script");
             scriptMathJax.SetAttributeValue("src", Globals.FileSystem.MathJaxCdnUri);

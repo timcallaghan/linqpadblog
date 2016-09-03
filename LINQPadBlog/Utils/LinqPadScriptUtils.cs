@@ -35,7 +35,7 @@ namespace Scombroid.LINQPadBlog.Utils
 
             File.WriteAllText(tempFile.FullName, fileContents);
 
-            // LINQPad files consists of an xml header section, followed by a blank line separator, followed by the script/code.
+            // LINQPad files consist of an xml header section, followed by a blank line separator, followed by the script/code.
             // Typical file contents look like:
             // 	<Query Kind="Program">
             // 	...

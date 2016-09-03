@@ -41,17 +41,17 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         [TestMethod]
         public void SuccessfullyProcessesMoreThanTwoArgs()
         {
+            var arg2 = "arg2";
             var arg3 = "arg3";
-            var arg4 = "arg4";
 
-            var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, arg3, arg4 });
+            var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression, arg2, arg3 });
 
             Assert.IsNotNull(pa.FilePath);
             Assert.IsTrue(pa.FilePath.FullName.EndsWith(TestData.CSharpExpression));
             Assert.IsNotNull(pa.AdditionalArgs);
             Assert.AreEqual(2, pa.AdditionalArgs.Length);
-            Assert.AreEqual(arg3, pa.AdditionalArgs[0]);
-            Assert.AreEqual(arg4, pa.AdditionalArgs[1]);
+            Assert.AreEqual(arg2, pa.AdditionalArgs[0]);
+            Assert.AreEqual(arg3, pa.AdditionalArgs[1]);
         }
     }
 }
