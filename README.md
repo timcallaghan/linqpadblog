@@ -77,7 +77,7 @@ Here's an example
 /*
 You place you text between multi-line comment markers.  
 Standard Markdown is supported (via MarkdownSharp) so things like *italicized* and **bold** work as expected.  
-You can also inlcude mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
+You can also include mathematics. For example, when \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 */
 void Main()
@@ -107,7 +107,7 @@ The process is:
 * Text can include Markdown and LATEX
 * At the end of the executable code section, place a call to a static helper method to perform the transform
 * The static helper method feeds the current *.linq file into the transformation engine
-* The transformation engine parses the file and transforms any Markdown into html, as well as encoding LATEX for the output target
+* The transformation engine parses the file and transforms any Markdown into html, as well as correctly escaping LATEX for the output target
 * The *.linq file is run (via LINQPad's Util.Run method) and all output is captured
 * An html document is generated with the transformed text contents, code sections, and any output
 * Depending on the output target, the html document is either written to the local file system or uploaded to wordpress.com
