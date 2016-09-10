@@ -9,15 +9,15 @@ namespace Scombroid.LINQPadBlog.Utils
         private readonly string _codeCommentStart;
         private readonly string _codeCommentEnd;
 
-        public ScriptContentParser(string codeCommentStart, string codeCommentEnd, string script)
+        public ScriptContentParser(string codeCommentStart, string codeCommentEnd, string script, string stripMeFromFile)
         {
             ScriptContentSections = new List<ScriptContentSection>();
             _codeCommentStart = codeCommentStart;
             _codeCommentEnd = codeCommentEnd;
-            ParseContents(script);
+            ParseContents(script, stripMeFromFile);
         }
 
-        private void ParseContents(string input)
+        private void ParseContents(string input, string stripMeFromFile)
         {
             ScriptContentSection currentSection = null;
             var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
@@ -71,7 +71,11 @@ namespace Scombroid.LINQPadBlog.Utils
                     {
                         currentSection = isInsideComment ? new ScriptContentSection(ScriptContentSectionType.MarkdownComment) : new ScriptContentSection(ScriptContentSectionType.CompiledCode);
                     }
-                    currentSection.AppendLine(line);
+
+                    if (isInsideComment || String.IsNullOrWhiteSpace(stripMeFromFile) || !line.Contains(stripMeFromFile))
+                    {
+                        currentSection.AppendLine(line);
+                    }
                 }
             }
 

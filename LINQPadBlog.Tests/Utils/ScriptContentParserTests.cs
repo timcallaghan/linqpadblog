@@ -10,7 +10,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         [TestMethod]
         public void CorrectlyParsesCSharpScript()
         {
-            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript());
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript(), null);
             Assert.AreEqual(10, scriptContentParser.ScriptContentSections.Count);
             Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
             Assert.AreEqual(ScriptContentSectionType.NonCompiledCode, scriptContentParser.ScriptContentSections[1].ContentType);
