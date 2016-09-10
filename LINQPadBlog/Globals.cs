@@ -17,7 +17,6 @@
         public class LINQPad
         {
             public const string QueryKindAttributeName = "Kind";
-            public const string TempDOMString = @"<div>True</div>";
 
             public class QueryKind
             {
