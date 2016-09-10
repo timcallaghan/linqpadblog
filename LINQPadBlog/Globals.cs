@@ -17,6 +17,7 @@
         public class LINQPad
         {
             public const string QueryKindAttributeName = "Kind";
+            public const string TempDOMString = @"<div>True</div>";
 
             public class QueryKind
             {
@@ -37,10 +38,18 @@
 
         public class Comments
         {
+            // C# multi-line comments
             public const string CSharpStart = "/*";
             public const string CSharpEnd = "*/";
+            // F# multi-line comments
             public const string FSharpStart = "(*";
             public const string FSharpEnd = "*)";
+            // Allows embedding of code blocks in comments (code won't be compiled/processed by LINQPad)
+            public const string NonCompiledCodeStart = "[[Code]]";
+            public const string NonCompiledCodeEnd = "[[/Code]]";
+            // Allows specification of where dump output will appear in the generated file
+            public const string DumpStart = "[[Dump]]";
+            public const string DumpEnd = "[[/Dump]]";
         }
 
         // LATEX/MathJax

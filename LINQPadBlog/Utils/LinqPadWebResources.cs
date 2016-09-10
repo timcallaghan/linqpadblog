@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using System;
+using HtmlAgilityPack;
 using LINQPad;
 
 namespace Scombroid.LINQPadBlog.Utils
@@ -29,12 +30,10 @@ namespace Scombroid.LINQPadBlog.Utils
             using (var tw = Util.CreateXhtmlWriter(true, false))
             {
                 // LINQPad's CreateXhtmlWriter appears to have a "bug" in ToString(), in that 
-                // it duplicates the html document inside the body tag 
-                // (perhaps Tostring() is not meant to be called on it?).
-                // To get around this, we simply find the first occurence of <body>
-                // and take all text up to that point (plus additional text to make the DOM well formed)
-                html = tw.ToString();
-                html = html.Substring(0, html.IndexOf(@"<body>")) + @"<body></body></html>";
+                // it returns empty if nothing has been written yet.  To get around this, we write "true"
+                // and then remove it after we've extracted the DOM 
+                tw.Write(true);
+                html = tw.ToString().Replace(Globals.LINQPad.TempDOMString, String.Empty);
             }
 
             var htmlDoc = new HtmlDocument();

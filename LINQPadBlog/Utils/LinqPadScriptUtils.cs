@@ -74,17 +74,25 @@ namespace Scombroid.LINQPadBlog.Utils
             var linqPadScriptInfo = new LinqPadScriptInfo()
             {
                 ProcessedArgs = processedArgs,
-                Header = fileHeaderLines.ToString(),
-                ScriptContents = fileContentLines.ToString()
+                Header = fileHeaderLines.ToString()
             };
 
             // Query kind will be one of:
             // Expression, Statements, Program, VBExpression, VBStatements, VBProgram, FSharpExpression, FSharpProgram, SQL, ESQL
             XDocument doc = XDocument.Parse(linqPadScriptInfo.Header);
+            if (doc == null)
+                throw new NotSupportedException($"{Globals.AppName} error: The supplied linq file could not be parsed. Make sure the file is a valid LINQPad file.");
+
             linqPadScriptInfo.QueryKind = doc.Root.Attribute(Globals.LINQPad.QueryKindAttributeName).Value;
 
             if (!IsQuerySupported(linqPadScriptInfo.QueryKind))
                 throw new NotSupportedException($"{Globals.AppName} does not support query kind of {linqPadScriptInfo.QueryKind}");
+
+            var scriptContentParser = new ScriptContentParser(
+                GetCommentStartTag(linqPadScriptInfo.QueryKind), 
+                GetCommentEndTag(linqPadScriptInfo.QueryKind), 
+                fileContentLines.ToString());
+            linqPadScriptInfo.ScriptContents = scriptContentParser.ScriptContentSections;
 
             // Run the *.linq file and capture the html output fragments from calls to .Dump() within the file
             linqPadScriptInfo.ScriptOutput = Util.Run(
@@ -106,6 +114,36 @@ namespace Scombroid.LINQPadBlog.Utils
             return queryKind == Globals.LINQPad.QueryKind.CSharpExpression
                 || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
                 || queryKind == Globals.LINQPad.QueryKind.CSharpProgram;
+        }
+
+        private static string GetCommentStartTag(string queryKind)
+        {
+            if
+                (
+                queryKind == Globals.LINQPad.QueryKind.CSharpExpression
+                || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
+                || queryKind == Globals.LINQPad.QueryKind.CSharpProgram
+                )
+            {
+                return Globals.Comments.CSharpStart;
+            }
+
+            throw new NotSupportedException($"{Globals.AppName} does not support query kind of {queryKind}");
+        }
+
+        private static string GetCommentEndTag(string queryKind)
+        {
+            if
+                (
+                queryKind == Globals.LINQPad.QueryKind.CSharpExpression
+                || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
+                || queryKind == Globals.LINQPad.QueryKind.CSharpProgram
+                )
+            {
+                return Globals.Comments.CSharpEnd;
+            }
+
+            throw new NotSupportedException($"{Globals.AppName} does not support query kind of {queryKind}");
         }
     }
 }

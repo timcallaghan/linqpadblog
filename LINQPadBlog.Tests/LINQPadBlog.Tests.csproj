@@ -58,6 +58,7 @@
     <Compile Include="Utils\LinqPadScriptUtilsTests.cs" />
     <Compile Include="Utils\ProcessedArgsTests.cs" />
     <Compile Include="Utils\LinqPadWebResourcesTests.cs" />
+    <Compile Include="Utils\ScriptContentParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LINQPadBlog\LINQPadBlog.csproj">
@@ -67,6 +68,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="TestData\CSharpExpression.linq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

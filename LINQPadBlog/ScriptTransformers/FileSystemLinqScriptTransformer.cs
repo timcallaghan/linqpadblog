@@ -1,10 +1,9 @@
 ﻿using HeyRed.MarkdownSharp;
 using HtmlAgilityPack;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Scombroid.LINQPadBlog.Utils;
 using System;
 using System.IO;
+using System.Text;
 
 namespace Scombroid.LINQPadBlog.ScriptTransformers
 {
@@ -36,16 +35,12 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             CreateWebPageResourceFiles(scriptInfo, _blogDir);
 
             // Convert markdown to html
-            // TODO: Handle more queryKind types (i.e. F#, VB)
-            var tree = CSharpSyntaxTree.ParseText(scriptInfo.ScriptContents);
-            SyntaxNode root = tree.GetRoot();
-            var rewriter = new CommentRewriter();
-            var newRoot = rewriter.Visit(root);
+            var convertedScript = ConvertScriptContentsToHtml(scriptInfo);
 
             // Get the output file path
             var outfile = new FileInfo(Path.Combine(_blogDir.FullName, Path.ChangeExtension(scriptInfo.ProcessedArgs.FilePath.Name, "html")));
 
-            var output = BuildHtmlContents(scriptInfo, newRoot.ToFullString(), true);
+            var output = BuildHtmlContents(scriptInfo, convertedScript, true);
             File.WriteAllText(outfile.FullName, output.DocumentNode.OuterHtml);
             result.Location = outfile.FullName;
 
@@ -113,24 +108,6 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
             var body = htmlDoc.DocumentNode.SelectSingleNode(Globals.DOM.BodyNodePath);
 
-            if (scriptHtml.StartsWith(Globals.FileSystem.CodeSectionEnd))
-            {
-                scriptHtml = scriptHtml.Substring(Globals.FileSystem.CodeSectionEnd.Length);
-            }
-
-            if (scriptHtml.EndsWith(Globals.FileSystem.CodeSectionStart))
-            {
-                scriptHtml = scriptHtml.Substring(0, scriptHtml.Length - Globals.FileSystem.CodeSectionStart.Length);
-            }
-            else if (scriptHtml.EndsWith(Globals.FileSystem.CodeSectionStart + Environment.NewLine))
-            {
-                scriptHtml = scriptHtml.Substring(0, scriptHtml.Length - Globals.FileSystem.CodeSectionStart.Length - Environment.NewLine.Length);
-            }
-            else
-            {
-                scriptHtml += Globals.FileSystem.CodeSectionEnd;
-            }
-
             var mainBody = htmlDoc.CreateTextNode(scriptHtml);
             body.AppendChild(mainBody);
 
@@ -140,30 +117,34 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             return htmlDoc;
         }
 
-        private class CommentRewriter : CSharpSyntaxRewriter
+        private string ConvertScriptContentsToHtml(LinqPadScriptInfo scriptInfo)
         {
-            Markdown _mark = new Markdown();
+            Markdown markdown = new Markdown();
+            var result = new StringBuilder();
 
-            public override SyntaxTrivia VisitTrivia(SyntaxTrivia trivia)
+            foreach (var section in scriptInfo.ScriptContents)
             {
-                // By convention, LINQPadBlog only looks for markdown in multi-line trivia
-                if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
-                {
-                    // Remove the leading multi-line comment start tag
-                    var multilineComment = trivia.ToString().Substring(Globals.Comments.CSharpStart.Length);
-                    // Remove the trailing multi-line comment end tag
-                    multilineComment = multilineComment.Substring(0, multilineComment.Length - Globals.Comments.CSharpEnd.Length);                  
+                if (String.IsNullOrWhiteSpace(section.Contents))
+                    continue;
 
-                    // Assumes that all multi-line comments are embedded between a block of code 
-                    // (should be true in general except at the start or end of the file, which is handled elsewhere)
-                    // Use Markdown to transform any embedded markdown in the comments to html
-                    return SyntaxFactory.Comment(Globals.FileSystem.CodeSectionEnd + _mark.Transform(multilineComment) + Globals.FileSystem.CodeSectionStart);
-                }
-                else
+                switch (section.ContentType)
                 {
-                    return base.VisitTrivia(trivia);
+                    case ScriptContentSectionType.CompiledCode:
+                    case ScriptContentSectionType.NonCompiledCode:
+                        result.AppendLine(Globals.FileSystem.CodeSectionStart);
+                        result.AppendLine(section.Contents);
+                        result.AppendLine(Globals.FileSystem.CodeSectionEnd);
+                        break;
+                    case ScriptContentSectionType.DumpOutput:
+                        // TODO: Implement dump lookup
+                        break;
+                    case ScriptContentSectionType.MarkdownComment:
+                        result.AppendLine(markdown.Transform(section.Contents));
+                        break;
                 }
             }
+
+            return result.ToString();
         }
     }
 }

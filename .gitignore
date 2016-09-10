@@ -5,3 +5,4 @@ LINQPadBlog/obj/
 packages/
 LINQPadBlog.Tests/obj/
 *.nupkg
+LINQPadBlog.sln.DotSettings.user
