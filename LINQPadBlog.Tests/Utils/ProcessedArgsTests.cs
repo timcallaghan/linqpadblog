@@ -29,7 +29,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         }
 
         [TestMethod]
-        public void SuccessfullyProcessesTwoArgs()
+        public void SuccessfullyProcessesOneValidArg()
         {
             var pa = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.CSharpExpression });
 
@@ -39,7 +39,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         }
 
         [TestMethod]
-        public void SuccessfullyProcessesMoreThanTwoArgs()
+        public void SuccessfullyProcessesMoreThanOneValidArg()
         {
             var arg2 = "arg2";
             var arg3 = "arg3";
