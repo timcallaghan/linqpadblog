@@ -8,9 +8,9 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
     public class ScriptContentParserTests
     {
         [TestMethod]
-        public void CorrectlyParsesCSharpScript()
+        public void CorrectlyParsesCSharpTestScript1()
         {
-            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript(), null);
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript1(), null);
             Assert.AreEqual(10, scriptContentParser.ScriptContentSections.Count);
             Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
             Assert.AreEqual(ScriptContentSectionType.NonCompiledCode, scriptContentParser.ScriptContentSections[1].ContentType);
@@ -24,7 +24,25 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[9].ContentType);
         }
 
-        private string GenerateCSharpTestScript()
+        [TestMethod]
+        public void CorrectlyParsesCSharpTestScript2()
+        {
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript2(), null);
+            Assert.AreEqual(2, scriptContentParser.ScriptContentSections.Count);
+            Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
+            Assert.AreEqual(ScriptContentSectionType.NonCompiledCode, scriptContentParser.ScriptContentSections[1].ContentType);
+        }
+
+        [TestMethod]
+        public void CorrectlyParsesCSharpTestScript3()
+        {
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript3(), null);
+            Assert.AreEqual(2, scriptContentParser.ScriptContentSections.Count);
+            Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
+            Assert.AreEqual(ScriptContentSectionType.NonCompiledCode, scriptContentParser.ScriptContentSections[1].ContentType);
+        }
+
+        private string GenerateCSharpTestScript1()
         {
             var input = new StringBuilder();
             input.AppendLine(Globals.Comments.CSharpStart);
@@ -56,6 +74,33 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             input.AppendLine(Globals.Comments.DumpEnd);
             input.AppendLine("Comment line 11");
             input.AppendLine("Comment line 12");
+            input.Append(Globals.Comments.CSharpEnd);
+
+            return input.ToString();
+        }
+
+        private string GenerateCSharpTestScript2()
+        {
+            var input = new StringBuilder();
+            input.AppendLine(Globals.Comments.CSharpStart);
+            input.AppendLine("Comment line 1");
+            input.AppendLine("Comment line 2");
+            input.AppendLine("Comment line 3");
+            input.AppendLine(Globals.Comments.NonCompiledCodeStart);
+            input.AppendLine("var date1 = new DateTime();");
+            input.AppendLine(Globals.Comments.NonCompiledCodeEnd);
+            input.Append(Globals.Comments.CSharpEnd);
+
+            return input.ToString();
+        }
+
+        private string GenerateCSharpTestScript3()
+        {
+            var input = new StringBuilder();
+            input.AppendLine(Globals.Comments.CSharpStart);
+            input.AppendLine(Globals.Comments.NonCompiledCodeStart);
+            input.AppendLine("var date1 = new DateTime();");
+            input.AppendLine(Globals.Comments.NonCompiledCodeEnd);
             input.Append(Globals.Comments.CSharpEnd);
 
             return input.ToString();

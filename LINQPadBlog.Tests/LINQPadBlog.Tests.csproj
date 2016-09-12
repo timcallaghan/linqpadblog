@@ -58,6 +58,7 @@
     <Compile Include="Utils\LinqPadScriptUtilsTests.cs" />
     <Compile Include="Utils\ProcessedArgsTests.cs" />
     <Compile Include="Utils\LinqPadWebResourcesTests.cs" />
+    <Compile Include="Utils\ScriptContentParserExceptionTests.cs" />
     <Compile Include="Utils\ScriptContentParserTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Globals.cs" />
+    <Compile Include="Utils\ScriptContentParseException.cs" />
     <Compile Include="Utils\ScriptContentParser.cs" />
     <Compile Include="Utils\ScriptContentSection.cs" />
     <Compile Include="Utils\ScriptContentSectionType.cs" />
