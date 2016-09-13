@@ -109,20 +109,31 @@ namespace Scombroid.LINQPadBlog.Utils
         private static bool IsQuerySupported(string queryKind)
         {
             return queryKind == Globals.LINQPad.QueryKind.CSharpExpression
-                || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
-                || queryKind == Globals.LINQPad.QueryKind.CSharpProgram;
+                   || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
+                   || queryKind == Globals.LINQPad.QueryKind.CSharpProgram
+                   || queryKind == Globals.LINQPad.QueryKind.FSharpExpression
+                   || queryKind == Globals.LINQPad.QueryKind.FSharpProgram;
         }
 
         private static string GetCommentStartTag(string queryKind)
         {
             if
-                (
+            (
                 queryKind == Globals.LINQPad.QueryKind.CSharpExpression
                 || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
                 || queryKind == Globals.LINQPad.QueryKind.CSharpProgram
-                )
+            )
             {
                 return Globals.Comments.CSharpStart;
+            }
+
+            if
+            (
+                queryKind == Globals.LINQPad.QueryKind.FSharpExpression
+                || queryKind == Globals.LINQPad.QueryKind.FSharpProgram
+            )
+            {
+                return Globals.Comments.FSharpStart;
             }
 
             throw new NotSupportedException($"{Globals.AppName} does not support query kind of {queryKind}");
@@ -131,13 +142,22 @@ namespace Scombroid.LINQPadBlog.Utils
         private static string GetCommentEndTag(string queryKind)
         {
             if
-                (
+            (
                 queryKind == Globals.LINQPad.QueryKind.CSharpExpression
                 || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
                 || queryKind == Globals.LINQPad.QueryKind.CSharpProgram
-                )
+            )
             {
                 return Globals.Comments.CSharpEnd;
+            }
+
+            if
+            (
+                queryKind == Globals.LINQPad.QueryKind.FSharpExpression
+                || queryKind == Globals.LINQPad.QueryKind.FSharpProgram
+            )
+            {
+                return Globals.Comments.FSharpEnd;
             }
 
             throw new NotSupportedException($"{Globals.AppName} does not support query kind of {queryKind}");

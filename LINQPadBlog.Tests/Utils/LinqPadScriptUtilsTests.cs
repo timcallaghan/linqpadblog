@@ -41,5 +41,17 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             Assert.AreEqual(Globals.LINQPad.QueryKind.CSharpProgram, scriptInfo.QueryKind);
             Assert.AreEqual(TestData.ExpectedTestScriptOuput, scriptInfo.ScriptOutput);
         }
+
+        [TestMethod]
+        public void SuccessfullyLoadsFSharpProgramScript()
+        {
+            var processedArgs = ProcessedArgs.ProcessScriptArgs(new string[] { TestData.FSharpProgram });
+
+            var scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(processedArgs, null);
+
+            Assert.IsNotNull(scriptInfo);
+            Assert.AreEqual(Globals.LINQPad.QueryKind.FSharpProgram, scriptInfo.QueryKind);
+            Assert.AreEqual(TestData.ExpectedTestScriptOuput, scriptInfo.ScriptOutput);
+        }
     }
 }
