@@ -42,6 +42,38 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             Assert.AreEqual(ScriptContentSectionType.NonCompiledCode, scriptContentParser.ScriptContentSections[1].ContentType);
         }
 
+        [TestMethod]
+        public void CorrectlyParsesCSharpTestScript4()
+        {
+            var input = new StringBuilder();
+            input.AppendLine(Globals.Comments.CSharpStart);
+            input.AppendLine(Globals.Comments.DumpStart);
+            input.AppendLine(Globals.Comments.DumpEnd);
+            input.AppendLine(Globals.Comments.CSharpEnd);
+
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, input.ToString(), null);
+            Assert.AreEqual(3, scriptContentParser.ScriptContentSections.Count);
+            Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
+            Assert.AreEqual(ScriptContentSectionType.DumpOutput, scriptContentParser.ScriptContentSections[1].ContentType);
+            Assert.AreEqual(ScriptContentSectionType.CompiledCode, scriptContentParser.ScriptContentSections[2].ContentType);
+        }
+
+        [TestMethod]
+        public void CorrectlyParsesCSharpTestScript5()
+        {
+            var input = new StringBuilder();
+            input.AppendLine(Globals.Comments.CSharpStart);
+            input.AppendLine(Globals.Comments.DumpStart);
+            input.AppendLine(Globals.Comments.DumpEnd);
+            // Note: This is using Append (not AppendLine) so we expect one less section
+            input.Append(Globals.Comments.CSharpEnd);
+
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, input.ToString(), null);
+            Assert.AreEqual(2, scriptContentParser.ScriptContentSections.Count);
+            Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
+            Assert.AreEqual(ScriptContentSectionType.DumpOutput, scriptContentParser.ScriptContentSections[1].ContentType);
+        }
+
         private string GenerateCSharpTestScript1()
         {
             var input = new StringBuilder();

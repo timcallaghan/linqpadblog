@@ -23,7 +23,6 @@ namespace Scombroid.LINQPadBlog.Utils
             ScriptContentSection currentSection = null;
             var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             var sectionStack = new Stack<ScriptContentSectionType>();
-            var isInsideComment = false;
 
             for (var lineIndex = 0; lineIndex < lines.Length; ++lineIndex)
             {
@@ -33,32 +32,31 @@ namespace Scombroid.LINQPadBlog.Utils
                     if (currentSection != null)
                     {
                         if (sectionStack.Pop() != ScriptContentSectionType.CompiledCode)
-                            throw new ScriptContentParseException($"Unexpected {_codeCommentStart} found on line {lineIndex + 1}");
+                            throw new ScriptContentParseException($"Unexpected {_codeCommentStart} found on line {lineIndex + 1}.");
 
                         ScriptContentSections.Add(currentSection);
                     }
 
                     currentSection = new ScriptContentSection(ScriptContentSectionType.MarkdownComment);
                     sectionStack.Push(ScriptContentSectionType.MarkdownComment);
-                    isInsideComment = true;
                 }
                 else if (line == _codeCommentEnd)
                 {
                     if (currentSection != null)
                     {
-                        if (sectionStack.Pop() != ScriptContentSectionType.MarkdownComment)
-                            throw new ScriptContentParseException($"Unexpected {_codeCommentEnd} found on line {lineIndex + 1}");
+                        if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
+                            throw new ScriptContentParseException($"Unexpected {_codeCommentEnd} found on line {lineIndex + 1}. Expected to see {GetClosingTagForSectionType(sectionStack.Peek())}.");
 
                         ScriptContentSections.Add(currentSection);
                     }
 
                     currentSection = null;
-                    isInsideComment = false;
+                    sectionStack.Pop();
                 }
                 else if (line == Globals.Comments.NonCompiledCodeStart)
                 {
                     if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
-                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeStart} found on line {lineIndex + 1}");
+                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeStart} found on line {lineIndex + 1}. Expected to see {GetClosingTagForSectionType(sectionStack.Peek())}.");
 
                     if (currentSection != null)
                     {
@@ -71,7 +69,7 @@ namespace Scombroid.LINQPadBlog.Utils
                 else if (line == Globals.Comments.NonCompiledCodeEnd)
                 {
                     if (sectionStack.Pop() != ScriptContentSectionType.NonCompiledCode)
-                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeEnd} found on line {lineIndex + 1}");
+                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeEnd} found on line {lineIndex + 1}. Expected to have previously seen {Globals.Comments.NonCompiledCodeStart}.");
 
                     ScriptContentSections.Add(currentSection);
                     currentSection = null;
@@ -79,7 +77,7 @@ namespace Scombroid.LINQPadBlog.Utils
                 else if (line == Globals.Comments.DumpStart)
                 {
                     if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
-                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.DumpStart} found on line {lineIndex + 1}");
+                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.DumpStart} found on line {lineIndex + 1}. Expected to see {GetClosingTagForSectionType(sectionStack.Peek())}.");
 
                     if (currentSection != null)
                     {
@@ -92,7 +90,7 @@ namespace Scombroid.LINQPadBlog.Utils
                 else if (line == Globals.Comments.DumpEnd)
                 {
                     if (sectionStack.Pop() != ScriptContentSectionType.DumpOutput)
-                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.DumpEnd} found on line {lineIndex + 1}");
+                        throw new ScriptContentParseException($"Unexpected {Globals.Comments.DumpEnd} found on line {lineIndex + 1}. Expected to have previously seen {Globals.Comments.DumpStart}.");
 
                     ScriptContentSections.Add(currentSection);
                     currentSection = null;
@@ -101,24 +99,21 @@ namespace Scombroid.LINQPadBlog.Utils
                 {
                     if (currentSection == null)
                     {
-                        if (isInsideComment)
+                        if (sectionStack.Any() && sectionStack.Peek() == ScriptContentSectionType.MarkdownComment)
                         {
-                            if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
-                                throw new ScriptContentParseException($"Expected comment resumption on line {lineIndex + 1} but did not find it");
-
                             currentSection = new ScriptContentSection(ScriptContentSectionType.MarkdownComment);
                         }
                         else
                         {
                             if (sectionStack.Any())
-                                throw new ScriptContentParseException($"Expected code block commencement on line {lineIndex + 1} but did not find it");
+                                throw new ScriptContentParseException($"Expected to be inside code block on line {lineIndex + 1} but was instead inside {sectionStack.Peek()}");
 
                             currentSection = new ScriptContentSection(ScriptContentSectionType.CompiledCode);
                             sectionStack.Push(ScriptContentSectionType.CompiledCode);
                         }
                     }
 
-                    if (isInsideComment || String.IsNullOrWhiteSpace(stripMeFromFile) || !line.Contains(stripMeFromFile))
+                    if (sectionStack.Contains(ScriptContentSectionType.MarkdownComment) || String.IsNullOrWhiteSpace(stripMeFromFile) || !line.Contains(stripMeFromFile))
                     {
                         currentSection.AppendLine(line);
                     }
@@ -132,10 +127,10 @@ namespace Scombroid.LINQPadBlog.Utils
                     throw new ScriptContentParseException($"Expected to be inside a code block at end of file but was instead inside a {currentSection.ContentType} section");
 
                 if (sectionStack.Count == 0)
-                    throw new ScriptContentParseException($"Expected to be inside a single code section on last line of file but nothing was found");
+                    throw new ScriptContentParseException($"Expected to be inside a single code section on last line of file but nothing was found on the stack");
 
                 if (sectionStack.Count > 1)
-                    throw new ScriptContentParseException($"Expected to be inside a single code section on last line of file but {sectionStack.Count} were found on the stack");
+                    throw new ScriptContentParseException($"Expected to be inside a single code section on last line of file but {sectionStack.Count} sections were found on the stack");
 
                 var finalSectionType = sectionStack.Pop();
                 if (finalSectionType != currentSection.ContentType)
@@ -143,6 +138,21 @@ namespace Scombroid.LINQPadBlog.Utils
 
                 ScriptContentSections.Add(currentSection);
             }
+        }
+
+        private string GetClosingTagForSectionType(ScriptContentSectionType sectionType)
+        {
+            switch (sectionType)
+            {
+                case ScriptContentSectionType.MarkdownComment:
+                    return _codeCommentEnd;
+                case ScriptContentSectionType.NonCompiledCode:
+                    return Globals.Comments.NonCompiledCodeEnd;
+                case ScriptContentSectionType.DumpOutput:
+                    return Globals.Comments.DumpEnd;
+            }
+
+            return String.Empty;
         }
     }
 }
