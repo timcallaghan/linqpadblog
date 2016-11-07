@@ -74,6 +74,23 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             Assert.AreEqual(ScriptContentSectionType.DumpOutput, scriptContentParser.ScriptContentSections[1].ContentType);
         }
 
+        [TestMethod]
+        public void CorrectlyParsesCSharpTestScript6()
+        {
+            var input = new StringBuilder();
+            input.AppendLine(Globals.Comments.CSharpStart);
+            input.AppendLine(Globals.Comments.DumpStart);
+            input.AppendLine(Globals.Comments.DumpEnd);
+            // Note: This is using Append (not AppendLine) so we expect one less section
+            input.Append(Globals.Comments.CSharpEnd);
+
+            var scriptContentParser = new ScriptContentParser(Globals.Comments.CSharpStart, Globals.Comments.CSharpEnd, GenerateCSharpTestScript4(), null);
+
+            Assert.AreEqual(2, scriptContentParser.ScriptContentSections.Count);
+            Assert.AreEqual(ScriptContentSectionType.MarkdownComment, scriptContentParser.ScriptContentSections[0].ContentType);
+            Assert.AreEqual(ScriptContentSectionType.CompiledCode, scriptContentParser.ScriptContentSections[1].ContentType);
+        }
+
         private string GenerateCSharpTestScript1()
         {
             var input = new StringBuilder();
@@ -134,6 +151,28 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             input.AppendLine("var date1 = new DateTime();");
             input.AppendLine(Globals.Comments.NonCompiledCodeEnd);
             input.Append(Globals.Comments.CSharpEnd);
+
+            return input.ToString();
+        }
+
+        private string GenerateCSharpTestScript4()
+        {
+            var input = new StringBuilder();
+            input.AppendLine(Globals.Comments.CSharpStart);
+            input.AppendLine("# LINQPadBlog - Blogging from LINQPad #");
+            input.AppendLine("Here is some opening text, in which I explain how this cool code commenting technique works and ");
+            input.AppendLine("how awesome LINQPad is for doing this kind of stuff.  ");
+            input.AppendLine("*This is italicized*, and so is _this_.");
+            input.AppendLine("**This is bold**, and so is __this__.");
+            input.AppendLine("Use ***italics and bold together*** if you ___have to___.");
+            input.AppendLine("");
+            input.AppendLine("The `$` character is just a shortcut for `window.jQuery`.");
+            input.AppendLine("");
+            input.AppendLine("Here is some math via Mathjax/LaTeX...  ");
+            input.AppendLine(@"When \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are");
+            input.AppendLine(@"$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$");
+            input.AppendLine(Globals.Comments.CSharpEnd);
+            input.Append("void Main()");
 
             return input.ToString();
         }

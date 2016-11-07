@@ -27,7 +27,8 @@ namespace Scombroid.LINQPadBlog.Utils
             for (var lineIndex = 0; lineIndex < lines.Length; ++lineIndex)
             {
                 var line = lines[lineIndex];
-                if (line == _codeCommentStart)
+                var lineTrimmed = line.Trim();
+                if (lineTrimmed == _codeCommentStart)
                 {
                     if (currentSection != null)
                     {
@@ -40,7 +41,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     currentSection = new ScriptContentSection(ScriptContentSectionType.MarkdownComment);
                     sectionStack.Push(ScriptContentSectionType.MarkdownComment);
                 }
-                else if (line == _codeCommentEnd)
+                else if (lineTrimmed == _codeCommentEnd)
                 {
                     if (currentSection != null)
                     {
@@ -53,7 +54,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     currentSection = null;
                     sectionStack.Pop();
                 }
-                else if (line == Globals.Comments.NonCompiledCodeStart)
+                else if (lineTrimmed == Globals.Comments.NonCompiledCodeStart)
                 {
                     if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
                         throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeStart} found on line {lineIndex + 1}. Expected to see {GetClosingTagForSectionType(sectionStack.Peek())}.");
@@ -66,7 +67,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     currentSection = new ScriptContentSection(ScriptContentSectionType.NonCompiledCode);
                     sectionStack.Push(ScriptContentSectionType.NonCompiledCode);
                 }
-                else if (line == Globals.Comments.NonCompiledCodeEnd)
+                else if (lineTrimmed == Globals.Comments.NonCompiledCodeEnd)
                 {
                     if (sectionStack.Pop() != ScriptContentSectionType.NonCompiledCode)
                         throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeEnd} found on line {lineIndex + 1}. Expected to have previously seen {Globals.Comments.NonCompiledCodeStart}.");
@@ -74,7 +75,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     ScriptContentSections.Add(currentSection);
                     currentSection = null;
                 }
-                else if (line == Globals.Comments.DumpStart)
+                else if (lineTrimmed == Globals.Comments.DumpStart)
                 {
                     if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
                         throw new ScriptContentParseException($"Unexpected {Globals.Comments.DumpStart} found on line {lineIndex + 1}. Expected to see {GetClosingTagForSectionType(sectionStack.Peek())}.");
@@ -87,7 +88,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     currentSection = new ScriptContentSection(ScriptContentSectionType.DumpOutput);
                     sectionStack.Push(ScriptContentSectionType.DumpOutput);
                 }
-                else if (line == Globals.Comments.DumpEnd)
+                else if (lineTrimmed == Globals.Comments.DumpEnd)
                 {
                     if (sectionStack.Pop() != ScriptContentSectionType.DumpOutput)
                         throw new ScriptContentParseException($"Unexpected {Globals.Comments.DumpEnd} found on line {lineIndex + 1}. Expected to have previously seen {Globals.Comments.DumpStart}.");
@@ -152,7 +153,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     return Globals.Comments.DumpEnd;
             }
 
-            return String.Empty;
+            return sectionType.ToString();
         }
     }
 }

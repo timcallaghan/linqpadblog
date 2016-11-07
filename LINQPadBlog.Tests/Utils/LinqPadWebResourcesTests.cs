@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scombroid.LINQPadBlog.Utils;
 
 namespace Scombroid.LINQPadBlog.Tests.Utils
@@ -9,7 +10,9 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
         [TestMethod]
         public void SuccessfullyGeneratesWebResources()
         {
-            var webResources = LinqPadWebResources.Generate();
+            var linqPadDOMFile = new FileInfo(TestData.LINQPadDOM);
+
+            var webResources = LinqPadWebResources.Generate(File.ReadAllText(linqPadDOMFile.FullName));
 
             Assert.IsNotNull(webResources);
             Assert.IsNotNull(webResources.LinqPadHtmlDoc);
