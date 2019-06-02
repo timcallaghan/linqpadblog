@@ -42,7 +42,8 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
             var mainBody = htmlDoc.CreateTextNode(scriptHtml);
             body.AppendChild(mainBody);
 
-            var dumpBody = htmlDoc.CreateTextNode(scriptInfo.ScriptOutput);
+            var scopedOutput = $@"<div id=""linqpadoutput"">{scriptInfo.ScriptOutput}</div>";
+            var dumpBody = htmlDoc.CreateTextNode(scopedOutput);
             body.AppendChild(dumpBody);
 
             return htmlDoc;
