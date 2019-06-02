@@ -6,8 +6,8 @@ namespace Scombroid.LINQPadBlog.Utils
 {
     public class ProcessedArgs
     {
-        public FileInfo FilePath { get; set; }
-        public string[] AdditionalArgs { get; set; }
+        public FileInfo FilePath { get; private set; }
+        public string[] AdditionalArgs { get; private set; }
 
         public static ProcessedArgs ProcessScriptArgs(string[] args)
         {

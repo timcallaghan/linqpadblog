@@ -4,9 +4,9 @@ namespace Scombroid.LINQPadBlog.Utils
 {
     public class LinqPadWebResources
     {
-        public string Styles { get; set; }
-        public string Scripts { get; set; }
-        public HtmlDocument LinqPadHtmlDoc { get; set; }
+        public string Styles { get; private set; }
+        public string Scripts { get; private set; }
+        public HtmlDocument LinqPadHtmlDoc { get; private set; }
 
         public static LinqPadWebResources Generate(string linqPadOutputDOM)
         {
