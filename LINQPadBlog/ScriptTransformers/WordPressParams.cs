@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Scombroid.LINQPadBlog.ScriptTransformers
 {
@@ -12,5 +13,6 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
         public string Password { get; set; }
         public string PostStatus { get; set; }
         public string Format { get; set; }
+        public List<string> Categories { get; set; } = new List<string>();
     }
 }

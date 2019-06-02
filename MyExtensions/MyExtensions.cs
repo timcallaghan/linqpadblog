@@ -78,4 +78,55 @@ public static class MyExtensions
 		webBrowser.Navigate(result.Location);
 		PanelManager.DisplayControl(webBrowser, "Blog Post");
 	}
+    
+    // Turns a linq file into an html page and uploads it to self-hosted full WordPress site
+	public static void CreateWordPressBlogPost(string postTitle, List<string> postCategories)
+	{
+		var args = Scombroid.LINQPadBlog.Utils.ProcessedArgs.ProcessScriptArgs(new string[] { Util.CurrentQueryPath });
+		var transformer = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressLinqScriptTransformer();
+		
+		var postInfoFilePath = Path.ChangeExtension(args.FilePath.FullName, "postinfo");
+		var postInfoFile = new FileInfo(postInfoFilePath);
+		
+		int? existingPostId = null;
+		if (postInfoFile.Exists)
+		{
+			var postInfoContents = File.ReadAllText(postInfoFilePath);
+			if (Int32.TryParse(postInfoContents, out int postId))
+			{
+				existingPostId = postId;
+			}
+		}
+
+		var postParams = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressParams()
+		{
+			BaseApiUrl = @"https://arbaureal.com/wp-json/",
+			PostTitle = postTitle,
+			PostDateUtc = DateTime.UtcNow,
+			PostStatus = "publish",
+			Username = "spoida",
+			Password = Util.GetPassword("arbaureal.com"),
+			Format = "standard",
+			Categories = postCategories,
+			PostID = existingPostId
+		};
+
+		Scombroid.LINQPadBlog.ScriptTransformers.IScriptTransformResult result = null;
+		using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, postParams, nameof(CreateWordPressBlogPost)))
+		{
+			// Run the script through LINQPad and extract any output
+			var scriptOutput = Util.Cmd("lprun.exe", $@"-format=htmlfrag ""{ trans.GetTempFilePath }""", true).LastOrDefault() ?? string.Empty;
+			result = trans.Transform(scriptOutput, GetLINQPadOutputDOM());
+		}
+		
+		if (!existingPostId.HasValue && result.PostId.HasValue)
+		{
+			File.WriteAllText(postInfoFilePath, result.PostId.Value.ToString());
+		}
+		
+		var webBrowser = new WebBrowser();
+		webBrowser.ScriptErrorsSuppressed = true;
+		webBrowser.Navigate(result.Location);
+		PanelManager.DisplayControl(webBrowser, "Blog Post");
+	}
 }
