@@ -90,6 +90,12 @@
                 public const string fsharp = "fsharp";
                 public const string sql = "sql";
             }
-        }   
+        }
+
+        public class WordPress
+        {
+            public const string CodeSectionStart = @"<pre><code class=""{0}"">";
+            public const string CodeSectionEnd = @"</code></pre>";
+        }
     }
 }
