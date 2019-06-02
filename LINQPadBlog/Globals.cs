@@ -68,10 +68,10 @@
             public const string ResourcesFolderName = "resources";
             public const string CodeSectionStart = @"<pre><code>";
             public const string CodeSectionEnd = @"</code></pre>";
-            public const string HighlightJsCssCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css";
-            public const string HighlightJsCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js";
+            public const string HighlightJsCssCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css";
+            public const string HighlightJsCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js";
             public const string HighlightJsLoadStatement = @"hljs.initHighlightingOnLoad();";
-            public const string MathJaxCdnUri = @"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+            public const string MathJaxCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML";
         }
 
         // WordPressDotComLinqScriptTransformer
