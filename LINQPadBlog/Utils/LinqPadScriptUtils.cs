@@ -121,8 +121,7 @@ namespace Scombroid.LINQPadBlog.Utils
         {
             if
             (
-                queryKind == Globals.LINQPad.QueryKind.CSharpExpression
-                || queryKind == Globals.LINQPad.QueryKind.CSharpStatements
+                queryKind == Globals.LINQPad.QueryKind.CSharpStatements
                 || queryKind == Globals.LINQPad.QueryKind.CSharpProgram
             )
             {
