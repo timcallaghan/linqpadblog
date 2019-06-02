@@ -1,0 +1,237 @@
+<style>
+div#linqpadoutput body {
+	 margin: 0.3em 0.3em 0.4em 0.4em;
+	 font-family: Verdana;
+	 font-size: 80%;
+	 background: white;
+}
+ div#linqpadoutput p, div#linqpadoutput pre {
+	 margin: 0;
+	 padding: 0;
+	 font-family: Verdana;
+}
+ div#linqpadoutput table {
+	 border-collapse: collapse;
+	 border: 2px solid #17b;
+	 margin: 0.3em 0.2em;
+}
+ div#linqpadoutput table.limit {
+	 border-bottom-color: #c31;
+}
+ div#linqpadoutput table.expandable {
+	 border-bottom-style: dashed;
+}
+ div#linqpadoutput table.error {
+	 border-bottom-width: 4px;
+}
+ div#linqpadoutput td, div#linqpadoutput th {
+	 vertical-align: top;
+	 border: 1px solid #aaa;
+	 padding: 0.1em 0.2em;
+	 margin: 0;
+}
+ div#linqpadoutput th {
+	 text-align: left;
+	 background-color: #ddd;
+	 border: 1px solid #777;
+	 font-family: tahoma;
+	 font-size: .9em;
+	 font-weight: bold;
+}
+ div#linqpadoutput th.member {
+	 padding: 0.1em 0.2em 0.1em 0.2em;
+}
+ div#linqpadoutput td.typeheader {
+	 font-family: tahoma;
+	 font-weight: bold;
+	 background-color: #17b;
+	 color: white;
+	 padding: 0 0.2em 0.15em 0.1em;
+}
+ div#linqpadoutput td.n {
+	 text-align: right;
+}
+ div#linqpadoutput a:link.typeheader, div#linqpadoutput a:visited.typeheader, div#linqpadoutput a:link.extenser, div#linqpadoutput a:visited.extenser, div#linqpadoutput a:link.fixedextenser, div#linqpadoutput a:visited.fixedextenser {
+	 font-family: tahoma;
+	 font-size: .9em;
+	 font-weight: bold;
+	 text-decoration: none;
+	 background-color: #17b;
+	 color: white;
+	 float: left;
+}
+ div#linqpadoutput a:link.difheader, div#linqpadoutput a:visited.difheader {
+	 color: #ff8;
+}
+ div#linqpadoutput a:link.extenser, div#linqpadoutput a:visited.extenser, div#linqpadoutput a:link.fixedextenser, div#linqpadoutput a:visited.fixedextenser {
+	 float: right;
+	 padding-left: 2pt;
+	 margin-left: 4pt;
+}
+ div#linqpadoutput span.typeglyph, div#linqpadoutput span.typeglyphx {
+	 padding: 0 0.2em 0 0;
+	 margin: 0;
+}
+ div#linqpadoutput span.extenser, div#linqpadoutput span.extenserx, div#linqpadoutput span.fixedextenser {
+	 margin-top: 1.2pt;
+}
+ div#linqpadoutput span.typeglyph, div#linqpadoutput span.extenser, div#linqpadoutput span.fixedextenser {
+	 font-family: webdings;
+}
+ div#linqpadoutput span.fixedextenser {
+	 display: none;
+	 position: fixed;
+	 right: 6px;
+}
+ div#linqpadoutput td.typeheader:hover .fixedextenser {
+	 display: block;
+}
+ div#linqpadoutput span.typeglyphx, div#linqpadoutput span.extenserx {
+	 font-family: arial;
+	 font-weight: bold;
+	 margin: 2px;
+}
+ div#linqpadoutput table.group {
+	 border: none;
+	 margin: 0;
+}
+ div#linqpadoutput td.group {
+	 border: none;
+	 padding: 0 0.1em;
+}
+ div#linqpadoutput div.spacer {
+	 margin: 0.6em 0;
+}
+ div#linqpadoutput table.headingpresenter {
+	 border: none;
+	 border-left: 3px dotted #1a5;
+	 margin: .8em 0 1em 0.15em;
+}
+ div#linqpadoutput th.headingpresenter {
+	 font-family: Arial;
+	 border: none;
+	 padding: 0 0 0.2em 0.5em;
+	 background-color: white;
+	 color: green;
+	 font-size: 1.1em;
+}
+ div#linqpadoutput td.headingpresenter {
+	 border: none;
+	 padding: 0 0 0 0.6em;
+}
+ div#linqpadoutput td.summary {
+	 background-color: #def;
+	 color: #024;
+	 font-family: Tahoma;
+	 padding: 0 0.1em 0.1em 0.1em;
+}
+ div#linqpadoutput td.columntotal {
+	 font-family: Tahoma;
+	 background-color: #eee;
+	 font-weight: bold;
+	 color: #17b;
+	 font-size: .9em;
+	 text-align: right;
+}
+ div#linqpadoutput span.graphbar {
+	 background: #17b;
+	 color: #17b;
+	 margin-left: -2px;
+	 margin-right: -2px;
+}
+ div#linqpadoutput a:link.graphcolumn, div#linqpadoutput a:visited.graphcolumn {
+	 color: #17b;
+	 text-decoration: none;
+	 font-weight: bold;
+	 font-family: Arial;
+	 font-size: 1.1em;
+	 letter-spacing: -0.2em;
+	 margin-left: 0.1em;
+	 margin-right: 0.2em;
+}
+ div#linqpadoutput a:link.collection, div#linqpadoutput a:visited.collection {
+	 color: green;
+}
+ div#linqpadoutput a:link.reference, div#linqpadoutput a:visited.reference {
+	 color: blue;
+}
+ div#linqpadoutput i {
+	 color: green;
+}
+ div#linqpadoutput em {
+	 color: red;
+}
+ div#linqpadoutput .highlight {
+	 background: #ff8;
+}
+ div#linqpadoutput .fixedfont {
+	 font-family: Consolas, monospace;
+}
+ div#linqpadoutput code {
+	 font-family: Consolas;
+}
+ div#linqpadoutput code.xml b {
+	 color: blue;
+	 font-weight: normal;
+}
+ div#linqpadoutput code.xml i {
+	 color: maroon;
+	 font-weight: normal;
+	 font-style: normal;
+}
+ div#linqpadoutput code.xml em {
+	 color: red;
+	 font-weight: normal;
+	 font-style: normal;
+}
+ div#linqpadoutput span.cc {
+	 background: #666;
+	 color: white;
+	 margin: 0 1.5px;
+	 padding: 0 1px;
+	 font-family: Consolas, monospace;
+	 border-radius: 3px;
+}
+ div#linqpadoutput .difadd {
+	 background: #d3f3d3;
+}
+ div#linqpadoutput .difremove {
+	 background: #f3d8d8;
+}
+ div#linqpadoutput ::-ms-clear {
+	 display: none;
+}
+ div#linqpadoutput input, div#linqpadoutput textarea, div#linqpadoutput button, div#linqpadoutput select {
+	 font-family: Verdana;
+	 font-size: 1em;
+	 padding: .2em;
+}
+ div#linqpadoutput button {
+	 padding: .2em .4em;
+}
+ div#linqpadoutput input, div#linqpadoutput textarea, div#linqpadoutput select {
+	 margin: .15em 0;
+}
+ div#linqpadoutput input[type="checkbox"], div#linqpadoutput input[type="radio"] {
+	 margin: 0 0.4em 0 0;
+	 height: 0.9em;
+	 width: 0.9em;
+}
+ div#linqpadoutput input[type="radio"]:focus, div#linqpadoutput input[type="checkbox"]:focus {
+	 outline: thin dotted red;
+}
+ div#linqpadoutput .checkbox-label {
+	 vertical-align: middle;
+	 position: relative;
+	 bottom: .07em;
+	 margin-right: .5em;
+}
+ div#linqpadoutput fieldset {
+	 margin: 0 .2em .4em .1em;
+	 border: 1pt solid #aaa;
+	 padding: .1em .6em .4em .6em;
+}
+ div#linqpadoutput legend {
+	 padding: .2em .1em;
+}
+</style>
