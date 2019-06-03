@@ -10,16 +10,17 @@ namespace Scombroid.LINQPadBlog.Utils
         private readonly string _codeCommentStart;
         private readonly string _codeCommentEnd;
 
-        public ScriptContentParser(string codeCommentStart, string codeCommentEnd, string script, string stripMeFromFile)
+        public ScriptContentParser(string codeCommentStart, string codeCommentEnd, string script, List<string> stripFromFile)
         {
             ScriptContentSections = new List<ScriptContentSection>();
             _codeCommentStart = codeCommentStart;
             _codeCommentEnd = codeCommentEnd;
-            ParseContents(script, stripMeFromFile);
+            ParseContents(script, stripFromFile);
         }
 
-        private void ParseContents(string input, string stripMeFromFile)
+        private void ParseContents(string input, List<string> stripFromFile)
         {
+            stripFromFile = stripFromFile?.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
             ScriptContentSection currentSection = null;
             var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             var sectionStack = new Stack<ScriptContentSectionType>();
@@ -114,7 +115,13 @@ namespace Scombroid.LINQPadBlog.Utils
                         }
                     }
 
-                    if (sectionStack.Contains(ScriptContentSectionType.MarkdownComment) || String.IsNullOrWhiteSpace(stripMeFromFile) || !line.Contains(stripMeFromFile))
+                    if 
+                    (
+                        sectionStack.Contains(ScriptContentSectionType.MarkdownComment) 
+                        || stripFromFile == null
+                        || !stripFromFile.Any() 
+                        || stripFromFile.All(s => !line.Contains(s))
+                    )
                     {
                         currentSection.AppendLine(line);
                     }

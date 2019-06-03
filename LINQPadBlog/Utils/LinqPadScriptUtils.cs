@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Linq;
@@ -8,7 +9,7 @@ namespace Scombroid.LINQPadBlog.Utils
     public static class LinqPadScriptUtils
     {
         // ReSharper disable once InconsistentNaming
-        public static LinqPadScriptInfo LoadLINQPadScriptInfo(TempFileManager tempFile, ProcessedArgs processedArgs, string stripMeFromFile)
+        public static LinqPadScriptInfo LoadLINQPadScriptInfo(TempFileManager tempFile, ProcessedArgs processedArgs, List<string> stripFromFile)
         {
             // LINQPad files consist of an xml header section, followed by a blank line separator, followed by the script/code.
             // Typical file contents look like:
@@ -68,8 +69,8 @@ namespace Scombroid.LINQPadBlog.Utils
             var scriptContentParser = new ScriptContentParser(
                 GetCommentStartTag(linqPadScriptInfo.QueryKind),
                 GetCommentEndTag(linqPadScriptInfo.QueryKind),
-                fileContentLines.ToString(),
-                stripMeFromFile);
+                fileContentLines.ToString().TrimEnd('\r', '\n'),
+                stripFromFile);
             linqPadScriptInfo.ScriptContents = scriptContentParser.ScriptContentSections;
 
             // Update tempFile contents with just the executable parts of the script

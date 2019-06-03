@@ -27,6 +27,12 @@ public static class MyExtensions
 
         return html;
     }
+    
+    public static List<string> GetBlogPostMethodNames() => new List<string> {
+        nameof(CreateFileSystemBlogPost),
+        nameof(CreateWordPressDotComBlogPost),
+        nameof(CreateWordPressBlogPost)
+    };
 
     public static void CreateFileSystemBlogPost(DirectoryInfo postDir)
     {
@@ -34,7 +40,7 @@ public static class MyExtensions
         var transformer = new Scombroid.LINQPadBlog.ScriptTransformers.FileSystemLinqScriptTransformer(postDir);
 
         Scombroid.LINQPadBlog.ScriptTransformers.IScriptTransformResult result = null;
-        using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, null, nameof(CreateFileSystemBlogPost)))
+        using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, null, GetBlogPostMethodNames()))
         {
             // Run the script through LINQPad and extract any output
             var scriptOutput = Util.Cmd("lprun.exe", $@"-format=htmlfrag ""{ trans.GetTempFilePath }""", true).LastOrDefault() ?? string.Empty;
@@ -55,18 +61,18 @@ public static class MyExtensions
 
         var postParams = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressDotComParams()
         {
-            BaseUrl = @"https://yoursite.wordpress.com",
-            BlogId = 12345678,
+            BaseUrl = @"https://arbaureal.wordpress.com",
+            BlogId = 113075450,
             PostTitle = postTitle,
             PostType = "post",
             PostStatus = "publish",
-            Username = "username",
-            Password = "password",
+            Username = "spoida",
+            Password = Util.GetPassword("wordpress.com"),
             PostID = null
         };
 
         Scombroid.LINQPadBlog.ScriptTransformers.IScriptTransformResult result = null;
-        using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, postParams, nameof(CreateWordPressDotComBlogPost)))
+        using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, postParams, GetBlogPostMethodNames()))
         {
             // Run the script through LINQPad and extract any output
             var scriptOutput = Util.Cmd("lprun.exe", $@"-format=htmlfrag ""{ trans.GetTempFilePath }""", true).LastOrDefault() ?? string.Empty;
@@ -78,8 +84,8 @@ public static class MyExtensions
 		webBrowser.Navigate(result.Location);
 		PanelManager.DisplayControl(webBrowser, "Blog Post");
 	}
-    
-    // Turns a linq file into an html page and uploads it to self-hosted full WordPress site
+
+	// Turns a linq file into an html page and uploads it to self-hosted full WordPress site
 	public static void CreateWordPressBlogPost(string postTitle, List<string> postCategories)
 	{
 		var args = Scombroid.LINQPadBlog.Utils.ProcessedArgs.ProcessScriptArgs(new string[] { Util.CurrentQueryPath });
@@ -112,7 +118,7 @@ public static class MyExtensions
 		};
 
 		Scombroid.LINQPadBlog.ScriptTransformers.IScriptTransformResult result = null;
-		using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, postParams, nameof(CreateWordPressBlogPost)))
+		using (var trans = new Scombroid.LINQPadBlog.ScriptTransformer(transformer, args, postParams, GetBlogPostMethodNames()))
 		{
 			// Run the script through LINQPad and extract any output
 			var scriptOutput = Util.Cmd("lprun.exe", $@"-format=htmlfrag ""{ trans.GetTempFilePath }""", true).LastOrDefault() ?? string.Empty;

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using Scombroid.LINQPadBlog.ScriptTransformers;
 using Scombroid.LINQPadBlog.Utils;
 
@@ -18,7 +18,7 @@ namespace Scombroid.LINQPadBlog
             ILinqScriptTransformer transformer,
             ProcessedArgs processedArgs,
             IScriptTransformParams scriptParams,
-            string stripMeFromFile
+            List<string> stripFromFile
         )
         {
             _transformer = transformer;
@@ -26,7 +26,7 @@ namespace Scombroid.LINQPadBlog
 
             // Take a copy of the file
             _tempFile = new TempFileManager(processedArgs.FilePath);
-            _scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(_tempFile, processedArgs, stripMeFromFile);
+            _scriptInfo = LinqPadScriptUtils.LoadLINQPadScriptInfo(_tempFile, processedArgs, stripFromFile);
         }
 
         public IScriptTransformResult Transform
