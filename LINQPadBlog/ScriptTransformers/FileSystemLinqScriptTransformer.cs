@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using Scombroid.LINQPadBlog.Utils;
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace Scombroid.LINQPadBlog.ScriptTransformers
@@ -132,7 +133,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
                     case ScriptContentSectionType.CompiledCode:
                     case ScriptContentSectionType.NonCompiledCode:
                         result.AppendLine(Globals.FileSystem.CodeSectionStart);
-                        result.AppendLine(section.Contents);
+                        result.AppendLine(WebUtility.HtmlEncode(section.Contents));
                         result.AppendLine(Globals.FileSystem.CodeSectionEnd);
                         break;
                     case ScriptContentSectionType.DumpOutput:

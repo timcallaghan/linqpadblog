@@ -155,7 +155,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
                     case ScriptContentSectionType.CompiledCode:
                     case ScriptContentSectionType.NonCompiledCode:
                         result.AppendLine(codeSectionStart);
-                        result.AppendLine(section.Contents);
+                        result.AppendLine(WebUtility.HtmlEncode(section.Contents));
                         result.AppendLine(Globals.WordPress.CodeSectionEnd);
                         break;
                     case ScriptContentSectionType.DumpOutput:
