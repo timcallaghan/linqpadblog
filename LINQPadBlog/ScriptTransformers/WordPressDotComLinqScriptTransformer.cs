@@ -1,5 +1,5 @@
-﻿using HeyRed.MarkdownSharp;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
+using Markdig;
 using Scombroid.LINQPadBlog.Utils;
 using System;
 using System.Net;
@@ -97,7 +97,6 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
         private string ConvertScriptContentsToHtml(LinqPadScriptInfo scriptInfo)
         {
-            Markdown markdown = new Markdown();
             var result = new StringBuilder();
             var codeSectionStart = string.Format(Globals.HighlightJs.CodeSectionWithLangStart, scriptInfo.GetScriptLangName());
 
@@ -150,7 +149,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
                         multilineComment = multilineComment.Replace(Globals.LATEX.IntermediateDollarSign, Globals.WordPressCom.LATEXMarker);
 
-                        result.Append(markdown.Transform(multilineComment));
+                        result.Append(Markdown.ToHtml(multilineComment));
                         break;
                 }
             }

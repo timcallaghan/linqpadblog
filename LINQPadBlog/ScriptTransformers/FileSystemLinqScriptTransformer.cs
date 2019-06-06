@@ -1,5 +1,5 @@
-﻿using HeyRed.MarkdownSharp;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
+using Markdig;
 using Scombroid.LINQPadBlog.Utils;
 using System;
 using System.IO;
@@ -120,12 +120,6 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
         private string ConvertScriptContentsToHtml(LinqPadScriptInfo scriptInfo)
         {
-            var options = new MarkdownOptions()
-            {
-                AutoNewlines = true
-            };
-            Markdown markdown = new Markdown(options);
-            //markdown.AutoNewLines = true;
             var result = new StringBuilder();
             var codeSectionStart = string.Format(Globals.HighlightJs.CodeSectionWithLangStart, scriptInfo.GetScriptLangName());
 
@@ -158,7 +152,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
                         // TODO: Implement dump lookup
                         break;
                     case ScriptContentSectionType.MarkdownComment:
-                        result.Append(markdown.Transform(section.Contents));
+                        result.Append(Markdown.ToHtml(section.Contents));
                         break;
                 }
             }
