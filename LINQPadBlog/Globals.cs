@@ -1,4 +1,6 @@
-﻿namespace Scombroid.LINQPadBlog
+﻿using System;
+
+namespace Scombroid.LINQPadBlog
 {
     public class Globals
     {
@@ -45,6 +47,8 @@
             public const string FSharpEnd = "*)";
             // Allows embedding of code blocks in comments (code won't be compiled/processed by LINQPad)
             public const string NonCompiledCodeStart = "[[Code]]";
+            public static Func<string,string> NonCompiledCodeWithLangStart = (lang) => $"[[Code({lang})]]";
+            public const string NonCompiledCodeRegexStart = @"^\[\[Code(?:\((?'lang'\w+)\))?\]\]$";
             public const string NonCompiledCodeEnd = "[[/Code]]";
             // Allows specification of where dump output will appear in the generated file
             public const string DumpStart = "[[Dump]]";
@@ -66,8 +70,6 @@
             public const string LINQPadCssFileName = "linqpad.css";
             public const string LINQPadJsFileName = "linqpad.js";
             public const string ResourcesFolderName = "resources";
-            public const string CodeSectionStart = @"<pre><code>";
-            public const string CodeSectionEnd = @"</code></pre>";
             public const string HighlightJsCssCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css";
             public const string HighlightJsCdnUri = @"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js";
             public const string HighlightJsLoadStatement = @"hljs.initHighlightingOnLoad();";
@@ -92,10 +94,19 @@
             }
         }
 
-        public class WordPress
+        public class HighlightJs
         {
-            public const string CodeSectionStart = @"<pre><code class=""{0}"">";
+            public const string CodeSectionStart = @"<pre><code>";
+            public const string CodeSectionWithLangStart = @"<pre><code class=""{0}"">";
             public const string CodeSectionEnd = @"</code></pre>";
+
+            public class Syntax
+            {
+                public const string csharp = "csharp";
+                public const string vb = "vb";
+                public const string fsharp = "fsharp";
+                public const string sql = "sql";
+            }
         }
     }
 }

@@ -135,7 +135,7 @@ namespace Scombroid.LINQPadBlog.Tests.Utils
             input.AppendLine("Comment line 1");
             input.AppendLine("Comment line 2");
             input.AppendLine("Comment line 3");
-            input.AppendLine(Globals.Comments.NonCompiledCodeStart);
+            input.AppendLine(Globals.Comments.NonCompiledCodeWithLangStart("csharp"));
             input.AppendLine("var date1 = new DateTime();");
             input.AppendLine(Globals.Comments.NonCompiledCodeEnd);
             input.Append(Globals.Comments.CSharpEnd);

@@ -99,24 +99,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
         {
             Markdown markdown = new Markdown();
             var result = new StringBuilder();
-            var lang = Globals.WordPressCom.Syntax.csharp;
-            switch (scriptInfo.QueryKind)
-            {
-                case Globals.LINQPad.QueryKind.VBExpression:
-                case Globals.LINQPad.QueryKind.VBStatements:
-                case Globals.LINQPad.QueryKind.VBProgram:
-                    lang = Globals.WordPressCom.Syntax.vb;
-                    break;
-                case Globals.LINQPad.QueryKind.FSharpExpression:
-                case Globals.LINQPad.QueryKind.FSharpProgram:
-                    lang = Globals.WordPressCom.Syntax.fsharp;
-                    break;
-                case Globals.LINQPad.QueryKind.SQL:
-                    lang = Globals.WordPressCom.Syntax.sql;
-                    break;
-            }
-
-            var codeSectionStart = string.Format(Globals.WordPressCom.CodeSectionStart, lang);
+            var codeSectionStart = string.Format(Globals.HighlightJs.CodeSectionWithLangStart, scriptInfo.GetScriptLangName());
 
             foreach (var section in scriptInfo.ScriptContents)
             {
@@ -126,9 +109,20 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
                 switch (section.ContentType)
                 {
                     case ScriptContentSectionType.CompiledCode:
+                        result.Append(codeSectionStart);
+                        result.Append(WebUtility.HtmlEncode(section.Contents));
+                        result.AppendLine(Globals.WordPressCom.CodeSectionEnd);
+                        break;
                     case ScriptContentSectionType.NonCompiledCode:
-                        result.AppendLine(codeSectionStart);
-                        result.AppendLine(WebUtility.HtmlEncode(section.Contents));
+                        if (!string.IsNullOrWhiteSpace(section.CodeClass))
+                        {
+                            result.Append(string.Format(Globals.WordPressCom.CodeSectionStart, section.CodeClass));
+                        }
+                        else
+                        {
+                            result.Append(codeSectionStart);
+                        }
+                        result.Append(WebUtility.HtmlEncode(section.Contents));
                         result.AppendLine(Globals.WordPressCom.CodeSectionEnd);
                         break;
                     case ScriptContentSectionType.DumpOutput:
@@ -156,7 +150,7 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
                         multilineComment = multilineComment.Replace(Globals.LATEX.IntermediateDollarSign, Globals.WordPressCom.LATEXMarker);
 
-                        result.AppendLine(markdown.Transform(multilineComment));
+                        result.Append(markdown.Transform(multilineComment));
                         break;
                 }
             }

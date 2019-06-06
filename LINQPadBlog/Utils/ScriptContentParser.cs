@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Scombroid.LINQPadBlog.Utils
 {
@@ -24,6 +25,7 @@ namespace Scombroid.LINQPadBlog.Utils
             ScriptContentSection currentSection = null;
             var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             var sectionStack = new Stack<ScriptContentSectionType>();
+            Regex nonCompiledCodeRegex = new Regex(Globals.Comments.NonCompiledCodeRegexStart, RegexOptions.None);
 
             for (var lineIndex = 0; lineIndex < lines.Length; ++lineIndex)
             {
@@ -55,7 +57,7 @@ namespace Scombroid.LINQPadBlog.Utils
                     currentSection = null;
                     sectionStack.Pop();
                 }
-                else if (lineTrimmed == Globals.Comments.NonCompiledCodeStart)
+                else if (nonCompiledCodeRegex.IsMatch(lineTrimmed))
                 {
                     if (sectionStack.Peek() != ScriptContentSectionType.MarkdownComment)
                         throw new ScriptContentParseException($"Unexpected {Globals.Comments.NonCompiledCodeStart} found on line {lineIndex + 1}. Expected to see {GetClosingTagForSectionType(sectionStack.Peek())}.");
@@ -65,7 +67,8 @@ namespace Scombroid.LINQPadBlog.Utils
                         ScriptContentSections.Add(currentSection);
                     }
 
-                    currentSection = new ScriptContentSection(ScriptContentSectionType.NonCompiledCode);
+                    var matchInfo = nonCompiledCodeRegex.Match(lineTrimmed);
+                    currentSection = new ScriptContentSection(ScriptContentSectionType.NonCompiledCode, matchInfo.Groups["lang"].Value);
                     sectionStack.Push(ScriptContentSectionType.NonCompiledCode);
                 }
                 else if (lineTrimmed == Globals.Comments.NonCompiledCodeEnd)

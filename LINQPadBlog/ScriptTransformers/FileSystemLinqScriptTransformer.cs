@@ -120,8 +120,14 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
 
         private string ConvertScriptContentsToHtml(LinqPadScriptInfo scriptInfo)
         {
-            Markdown markdown = new Markdown();
+            var options = new MarkdownOptions()
+            {
+                AutoNewlines = true
+            };
+            Markdown markdown = new Markdown(options);
+            //markdown.AutoNewLines = true;
             var result = new StringBuilder();
+            var codeSectionStart = string.Format(Globals.HighlightJs.CodeSectionWithLangStart, scriptInfo.GetScriptLangName());
 
             foreach (var section in scriptInfo.ScriptContents)
             {
@@ -131,16 +137,28 @@ namespace Scombroid.LINQPadBlog.ScriptTransformers
                 switch (section.ContentType)
                 {
                     case ScriptContentSectionType.CompiledCode:
+                        result.Append(codeSectionStart);
+                        result.Append(WebUtility.HtmlEncode(section.Contents));
+                        result.AppendLine(Globals.HighlightJs.CodeSectionEnd);
+                        break;
                     case ScriptContentSectionType.NonCompiledCode:
-                        result.AppendLine(Globals.FileSystem.CodeSectionStart);
-                        result.AppendLine(WebUtility.HtmlEncode(section.Contents));
-                        result.AppendLine(Globals.FileSystem.CodeSectionEnd);
+                        if (!string.IsNullOrWhiteSpace(section.CodeClass))
+                        {
+                            result.Append(string.Format(Globals.HighlightJs.CodeSectionWithLangStart, section.CodeClass));
+                        }
+                        else
+                        {
+                            result.Append(codeSectionStart);
+                        }
+                        
+                        result.Append(WebUtility.HtmlEncode(section.Contents));
+                        result.AppendLine(Globals.HighlightJs.CodeSectionEnd);
                         break;
                     case ScriptContentSectionType.DumpOutput:
                         // TODO: Implement dump lookup
                         break;
                     case ScriptContentSectionType.MarkdownComment:
-                        result.AppendLine(markdown.Transform(section.Contents));
+                        result.Append(markdown.Transform(section.Contents));
                         break;
                 }
             }

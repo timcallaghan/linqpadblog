@@ -8,10 +8,13 @@ namespace Scombroid.LINQPadBlog.Utils
         public ScriptContentSectionType ContentType { get; private set; }
         public string Contents => _lines.ToString();
 
-        public ScriptContentSection(ScriptContentSectionType contentType)
+        public string CodeClass { get; private set; }
+
+        public ScriptContentSection(ScriptContentSectionType contentType, string codeClass = null)
         {
             _lines = new StringBuilder();
             ContentType = contentType;
+            CodeClass = !string.IsNullOrWhiteSpace(codeClass) ? codeClass : null;
         }
 
         public void AppendLine(string line)
