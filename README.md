@@ -24,46 +24,46 @@ The setup process is slightly convoluted so suggestions to improve this process 
 * Open LINQPad and then open the inbuilt `My Extensions` file
 * Add the following static methods to the `MyExtensions` class
 
-~~~~
-	// Turns a linq file into an html page and saves it to the local file system
-	public static void CreateFileSystemBlogPost(DirectoryInfo postDir)
+```
+// Turns a linq file into an html page and saves it to the local file system
+public static void CreateFileSystemBlogPost(DirectoryInfo postDir)
+{
+	var args = Scombroid.LINQPadBlog.Utils.ProcessedArgs.ProcessScriptArgs(new string[] { Util.CurrentQueryPath });
+	var transformer = new Scombroid.LINQPadBlog.ScriptTransformers.FileSystemLinqScriptTransformer(postDir);
+	var result = Scombroid.LINQPadBlog.ScriptTransformer.Transform(transformer, args, null, nameof(CreateFileSystemBlogPost));
+
+	var webBrowser = new WebBrowser();
+	webBrowser.ScriptErrorsSuppressed = true;
+	webBrowser.Navigate($"file:///{result.Location}");
+	PanelManager.DisplayControl(webBrowser, "Blog Post");
+}
+
+// Turns a linq file into an html page and uploads it to wordpress.com
+public static void CreateWordPressDotComBlogPost(string postTitle)
+{
+	var args = Scombroid.LINQPadBlog.Utils.ProcessedArgs.ProcessScriptArgs(new string[] { Util.CurrentQueryPath });
+	var transformer = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressDotComLinqScriptTransformer();
+
+	var postParams = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressDotComParams()
 	{
-		var args = Scombroid.LINQPadBlog.Utils.ProcessedArgs.ProcessScriptArgs(new string[] { Util.CurrentQueryPath });
-		var transformer = new Scombroid.LINQPadBlog.ScriptTransformers.FileSystemLinqScriptTransformer(postDir);
-		var result = Scombroid.LINQPadBlog.ScriptTransformer.Transform(transformer, args, null, nameof(CreateFileSystemBlogPost));
+		BaseUrl = @"https://your_site.wordpress.com",
+		BlogId = 123456789,
+		PostTitle = postTitle,
+		PostType = "post",
+		PostStatus = "publish",
+		Username = "your_username",
+		Password = "your_password",
+		PostID = null
+	};
 
-		var webBrowser = new WebBrowser();
-		webBrowser.ScriptErrorsSuppressed = true;
-		webBrowser.Navigate($"file:///{result.Location}");
-		PanelManager.DisplayControl(webBrowser, "Blog Post");
-	}
+	var result = Scombroid.LINQPadBlog.ScriptTransformer.Transform(transformer, args, postParams, nameof(CreateWordPressDotComBlogPost));
 
-	// Turns a linq file into an html page and uploads it to wordpress.com
-	public static void CreateWordPressDotComBlogPost(string postTitle)
-	{
-		var args = Scombroid.LINQPadBlog.Utils.ProcessedArgs.ProcessScriptArgs(new string[] { Util.CurrentQueryPath });
-		var transformer = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressDotComLinqScriptTransformer();
-
-		var postParams = new Scombroid.LINQPadBlog.ScriptTransformers.WordPressDotComParams()
-		{
-			BaseUrl = @"https://your_site.wordpress.com",
-			BlogId = 123456789,
-			PostTitle = postTitle,
-			PostType = "post",
-			PostStatus = "publish",
-			Username = "your_username",
-			Password = "your_password",
-			PostID = null
-		};
-
-		var result = Scombroid.LINQPadBlog.ScriptTransformer.Transform(transformer, args, postParams, nameof(CreateWordPressDotComBlogPost));
-
-		var webBrowser = new WebBrowser();
-		webBrowser.ScriptErrorsSuppressed = true;
-		webBrowser.Navigate(result.Location);
-		PanelManager.DisplayControl(webBrowser, "Blog Post");
-	}
-~~~~
+	var webBrowser = new WebBrowser();
+	webBrowser.ScriptErrorsSuppressed = true;
+	webBrowser.Navigate(result.Location);
+	PanelManager.DisplayControl(webBrowser, "Blog Post");
+}
+```
 
 * Open the `Query Properties` dialog (F4) and add a reference to the LINQPadBlog nuget package
 * In the `Query Properties` dialog, also add a reference to `System.Windows.Forms.dll`
@@ -74,7 +74,7 @@ You should now have LINQPadBlog accessible by all scripts that you write.
 ### How do I use it? ###
 
 Here's an example
-~~~~
+```
 /*
 Place text between multi-line comment markers.  
 Standard Markdown is supported so things like *italicized* and **bold** work as expected.  
@@ -98,7 +98,7 @@ It's also ok to add comments after the code.
 Any output from calls to .Dump() will be placed at the end of the file.  
 It's a good idea to name your .Dump() calls so that LINQPad generates a nice heading to correlate with the code output.
 */
-~~~~
+```
 
 ### How does it work? ###
 
